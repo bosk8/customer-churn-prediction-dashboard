@@ -44,7 +44,7 @@ Download the IBM Telco Customer Churn dataset and save it to `data/raw/telco_chu
 ### 2. Train Model
 
 ```bash
-python src/train.py
+python -m src.train
 ```
 
 This will:
@@ -57,7 +57,7 @@ This will:
 ### 3. Generate Batch Predictions
 
 ```bash
-python src/score.py
+python -m src.score
 ```
 
 This will:
@@ -89,14 +89,48 @@ churn-streamlit/
 ├── app/
 │   └── streamlit_app.py             # Streamlit dashboard
 ├── src/
+│   ├── __init__.py
+│   ├── config.py                    # Configuration variables
+│   ├── data.py                      # Data loading and preparation
+│   ├── model.py                     # Model training and evaluation
 │   ├── train.py                     # Training script
-│   ├── score.py                     # Batch scoring script
-│   └── utils.py                     # Utility functions
+│   └── score.py                     # Batch scoring script
+├── tests/                           # Tests
+│   ├── __init__.py
+│   ├── test_train.py
+│   └── test_score.py
 ├── notebooks/
 │   └── 01_eda.ipynb                 # Exploratory data analysis
 ├── env/
-│   └── requirements.txt             # Python dependencies
+│   ├── requirements.txt             # Python dependencies
+│   └── requirements-dev.txt         # Development dependencies
 └── README.md                        # This file
+```
+
+## Development
+
+To run the development checks, first install the development dependencies:
+
+```bash
+pip install -r env/requirements-dev.txt
+```
+
+### Running Tests
+
+```bash
+pytest tests/
+```
+
+### Running Linters
+
+```bash
+flake8 src/ tests/
+```
+
+### Running Type Checking
+
+```bash
+mypy src/ tests/
 ```
 
 ## Model Performance
@@ -136,7 +170,7 @@ The training script automatically selects the best model based on ROC AUC score.
 ## Troubleshooting
 
 ### Model fails to achieve AUC ≥ 0.75
-- Tune hyperparameters in `src/train.py`
+- Tune hyperparameters in `src/config.py`
 - Check for data quality issues in EDA notebook
 - Consider feature interactions or engineering
 
@@ -150,7 +184,7 @@ The training script automatically selects the best model based on ROC AUC score.
 
 ### Streamlit app errors
 - Verify `artifacts/model.joblib` and `artifacts/top_risk.csv` exist
-- Run `python src/train.py` and `python src/score.py` before launching app
+- Run `python -m src.train` and `python -m src.score` before launching app
 - Check file paths are relative to the app directory
 
 ## Contributing
@@ -160,4 +194,3 @@ This is a standalone project following OpenSpec specifications. For changes, ref
 ## License
 
 [Add your license here]
-

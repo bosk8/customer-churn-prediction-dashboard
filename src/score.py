@@ -1,18 +1,30 @@
 import pandas as pd
 import joblib
 
-# Load model and data
-model = joblib.load("artifacts/model.joblib")
-df = pd.read_csv("data/raw/telco_churn.csv")
+from src.config import MODEL_FILE, TOP_RISK_FILE
+from src.data import load_data
 
-# Generate predictions
-scores = model.predict_proba(df.drop(columns=["Churn", "customerID"]))[:, 1]
 
-# Create output with customer IDs and scores
-out = df.assign(churn_score=scores).sort_values("churn_score", ascending=False)
+def main():
+    """
+    Main function to run the scoring pipeline.
+    """
+    model = joblib.load(MODEL_FILE)
+    df = load_data()
 
-# Export top 500 at-risk customers
-out[["customerID", "churn_score"]].head(500).to_csv("artifacts/top_risk.csv", index=False)
+    X = df.drop(columns=["Churn", "customerID"])
+    scores = model.predict_proba(X)[:, 1]
 
-print(f"Top 500 at-risk customers saved to artifacts/top_risk.csv")
+    out = df.assign(churn_score=scores).sort_values(
+        "churn_score", ascending=False
+    )
 
+    out[["customerID", "churn_score"]].head(500).to_csv(
+        TOP_RISK_FILE, index=False
+    )
+
+    print(f"Top 500 at-risk customers saved to {TOP_RISK_FILE}")
+
+
+if __name__ == "__main__":
+    main()
