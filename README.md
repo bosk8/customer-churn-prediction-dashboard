@@ -131,6 +131,8 @@ The training script automatically selects the best model based on ROC AUC score.
 
 [Add your Streamlit Community Cloud URL here after deployment]
 
+**Repository**: [https://github.com/bosk8/customer-churn-prediction-dashboard](https://github.com/bosk8/customer-churn-prediction-dashboard)
+
 ## Troubleshooting
 
 ### Model fails to achieve AUC ≥ 0.75
